@@ -10,22 +10,22 @@
     <h1>Hello world!</h1>
 
     <script type="text/paperscript" canvas="myCanvas">
-        var createGrid = function(point, size) {
-            var width = size.width*5;
-            var height = size.height*5;
+        var createGrid = function(origin, size) {
+            //var width = size.width*5;
+            //var height = size.height*5;
 
-            var x = origin.x + size.width/2;
-            var y = origin.y;
-
-            var rectangle = new Rectangle(new Point(x, y), new Size(width, height));
-            var path = new Path.Rectangle(rectangle);
-            path.strokeColor = 'black';
+            var xOffset = size.width/2;
 
             for (var i = 0; i < 5; i++) {
-                var line = new Path();
-                line.strokeColor = 'black';
-                line.add(new Point(x+(size.width*i), y));
-                line.add(new Point(x+(size.width*i), y+height))
+
+                for (var j = 0; j < 5; j++) {
+                    var x = origin.x + size.width*j + xOffset;
+                    var y = origin.y + size.height*i;
+
+                    var rectangle = new Rectangle(new Point(x, y), size);
+                    var path = new Path.Rectangle(rectangle);
+                    path.strokeColor = 'black';
+                }
             }
         }
 
@@ -51,9 +51,6 @@
             return rectangle;
         }
 
-        var gridLayer = new Layer();
-        var topLayer = new Layer();
-
         var origin = new Point(5, 5);
         var size = new Size(20, 25);
 
@@ -66,51 +63,10 @@
                 var x = origin.x + size.width*j;
 
                 var point = new Point(x, y);
-
                 var rectangle = createCell(point, size);
 
-                /*var stringLine = new Path();
-                stringLine.strokeColor = 'black';
-                stringLine.add(rectangle.topCenter);
-                stringLine.add(rectangle.bottomCenter);
-
-                gridLayer.addChild(stringLine);
-
-                var fretLine = new Path();
-                fretLine.strokeColor = 'black';
-
-                if (j == 0) {
-                    fretLine.add(rectangle.bottomRight);
-                    fretLine.add(rectangle.bottomCenter);
-                } else if (j == 5) {
-                    fretLine.add(rectangle.bottomCenter);
-                    fretLine.add(rectangle.bottomLeft);
-                } else {
-                    fretLine.add(rectangle.bottomLeft);
-                    fretLine.add(rectangle.bottomRight);
-                }
-
-                gridLayer.addChild(fretLine);*/
             }
         }
-        // Create a new layer for circles
-        //var circleLayer = new Layer();
-
-        //var myCircle = new Path.Circle(rectangle.center, rectangle.width/4);
-        //myCircle.fillColor = 'black';
-
-        //circleLayer.sendToBack();
-
-        // Create a new layer for grid lines:
-        //var gridLayer = new Layer();
-
-        //var stringLine = new Path();
-        //stringLine.strokeColor = 'black';
-        //stringLine.add(rectangle.topCenter);
-        //stringLine.add(rectangle.bottomCenter);
-
-        //gridLayer.sendToBack();
-
     </script>
 
     <body>
