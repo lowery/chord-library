@@ -10,23 +10,111 @@
     <h1>Hello world!</h1>
 
     <script type="text/paperscript" canvas="myCanvas">
-        // Create a Paper.js Path to draw a line into it:
-        var path = new Path();
+        var createGrid = function(point, size) {
+            var width = size.width*5;
+            var height = size.height*5;
 
-        // Give the stroke a color
-        path.strokeColor = 'black';
-        var start = new Point(100, 100);
+            var x = origin.x + size.width/2;
+            var y = origin.y;
 
-        // Move to start and draw a line from there
-        path.moveTo(start);
+            var rectangle = new Rectangle(new Point(x, y), new Size(width, height));
+            var path = new Path.Rectangle(rectangle);
+            path.strokeColor = 'black';
 
-        // Note the plus operator on Point objects.
-        // PaperScript does that for us, and much more!
-        path.lineTo(start + [ 100, -50 ]);
+            for (var i = 0; i < 5; i++) {
+                var line = new Path();
+                line.strokeColor = 'black';
+                line.add(new Point(x+(size.width*i), y));
+                line.add(new Point(x+(size.width*i), y+height))
+            }
+        }
+
+        var createCell = function(point, size) {
+            var rectangle = new Rectangle(point, size);
+            var path = new Path.Rectangle(rectangle);
+            path.fillColor = '#e9e9ff';
+            path.opacity = .5;
+
+            var myCircle = new Path.Circle(rectangle.center, rectangle.width/3);
+            myCircle.fillColor = 'black';
+
+            var group = new Group([path, myCircle]);
+
+            myCircle.onMouseEnter = function(event) {
+                this.fillColor = 'red';
+            }
+
+            myCircle.onMouseLeave = function(event) {
+                this.fillColor = '#e9e9ff';
+            }
+
+            return rectangle;
+        }
+
+        var gridLayer = new Layer();
+        var topLayer = new Layer();
+
+        var origin = new Point(5, 5);
+        var size = new Size(20, 25);
+
+        createGrid(origin, size);
+
+        for (var i = 0; i < 5; i++) {
+            var y = origin.y + size.height*i;
+
+            for (var j = 0; j < 6; j++) {
+                var x = origin.x + size.width*j;
+
+                var point = new Point(x, y);
+
+                var rectangle = createCell(point, size);
+
+                /*var stringLine = new Path();
+                stringLine.strokeColor = 'black';
+                stringLine.add(rectangle.topCenter);
+                stringLine.add(rectangle.bottomCenter);
+
+                gridLayer.addChild(stringLine);
+
+                var fretLine = new Path();
+                fretLine.strokeColor = 'black';
+
+                if (j == 0) {
+                    fretLine.add(rectangle.bottomRight);
+                    fretLine.add(rectangle.bottomCenter);
+                } else if (j == 5) {
+                    fretLine.add(rectangle.bottomCenter);
+                    fretLine.add(rectangle.bottomLeft);
+                } else {
+                    fretLine.add(rectangle.bottomLeft);
+                    fretLine.add(rectangle.bottomRight);
+                }
+
+                gridLayer.addChild(fretLine);*/
+            }
+        }
+        // Create a new layer for circles
+        //var circleLayer = new Layer();
+
+        //var myCircle = new Path.Circle(rectangle.center, rectangle.width/4);
+        //myCircle.fillColor = 'black';
+
+        //circleLayer.sendToBack();
+
+        // Create a new layer for grid lines:
+        //var gridLayer = new Layer();
+
+        //var stringLine = new Path();
+        //stringLine.strokeColor = 'black';
+        //stringLine.add(rectangle.topCenter);
+        //stringLine.add(rectangle.bottomCenter);
+
+        //gridLayer.sendToBack();
+
     </script>
 
     <body>
-        <canvas id="myCanvas" resize></canvas>
+        <canvas id="myCanvas"></canvas>
     </body>
 </body>
 </html>
